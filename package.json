@@ -1,0 +1,22 @@
+{
+  "name": "fullstack-websocket-paint",
+  "version": "1.0.0",
+  "description": "rrr",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utimur/Fullstack-websocket-paint.git"
+  },
+  "author": "aks",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/utimur/Fullstack-websocket-paint/issues"
+  },
+  "homepage": "https://github.com/utimur/Fullstack-websocket-paint#readme",
+  "keywords": [
+    "1111"
+  ]
+}
