@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
     "@testing-library/user-event": "^12.2.2",
@@ -24,8 +25,11 @@
     "react-dom": "^17.0.1",
     "react-draft-wysiwyg": "^1.14.6",
     "react-quill": "^2.0.0-beta.2",
+    "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0",
     "uncontrollable": "^7.2.1",
     "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"

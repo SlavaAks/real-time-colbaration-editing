@@ -29,9 +29,29 @@ class Files extends React.Component {
     render() {
         const { files } = this.state
         return (
-            <div>
-                {files.map(file => { return (<div onClick={()=>this.handleClickFile(file)}>{file}</div>) })}
-            </div>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>file_name</th>
+                        <th>type</th>
+                        <th>Size</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {files.map(file => {
+                        const [uuid, format] = file.split('.')
+                        return (
+                            <tr >
+                                <td onClick={() => this.handleClickFile(file)}>{uuid} </td>
+                                <td>{format}</td>
+                                <td>{ }</td>
+                            </tr>
+                        )
+                    })
+                    }
+                </tbody>
+            </table>
         )
     }
 }

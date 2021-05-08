@@ -5,6 +5,11 @@ import Toolbar from "./components/Toolbar";
 import Canvas from "./components/Canvas";
 import Header from "./components/Header";
 import Files from "./components/Files";
+import Chat from "./components/Chat";
+import canvasState from "./store/canvasState";
+
+import Registration from "./components/Registration";
+import Login from "./components/Login";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import JoditEditor from "jodit-react";
 //import { Editor } from "react-draft-wysiwyg";
@@ -25,13 +30,21 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 
-
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "./action/user";
 
 
 const App = () => {
+    const isAuth = useSelector(state => state.user.isAuth)
+    const dispatch = useDispatch()
+    const [socket, setSocket] = useState(new WebSocket(`ws://localhost:5000/`))
+    useEffect(() => {
+        dispatch(auth())
+    }, [])
+
     const [user_id, setId] = useState(uuidv4())
     // const [socket, setSocket] = useState(new WebSocket(`ws://25.42.86.134:5000/`))
-    const [socket, setSocket] = useState(new WebSocket(`ws://localhost:5000/`))
+    
     const editor = useRef(null)
     // const [content, setContent] = useState(EditorState.createEmpty())
     const [content, setContent] = useState('')
@@ -116,21 +129,35 @@ const App = () => {
 
             <Router>
                 <Header />
-                <Switch>
-
-                    <Route path='/paint/:id'>
-                        <Toolbar />
-                        <SettingBar />
-                        <Canvas />
-                    </Route>
-                    <Route path='/word/:id'>
-                        <Editor />
-                    </Route>
-                    <Route path='/'>
-                        <Files/>
-                    </Route>
-                    <Redirect to={`f${(+new Date).toString(16)}`} />
-                </Switch>
+                {!isAuth ?
+                    <Switch>
+                        <Route path='/Registration'>
+                            <Registration />
+                        </Route>
+                        <Route path='/Login'>
+                            <Login />
+                        </Route>
+                        <Redirect to='/Login' />
+                    </Switch>
+                    :
+                    <Switch>
+                        <Route path='/paint/:id'>
+                            <Toolbar/>
+                            <SettingBar />
+                            <Canvas />
+                            <Chat socket={socket}/>
+                        </Route>
+                        <Route path='/word/:id'>
+                            <Editor socket={socket}/>
+                            <Chat socket={socket}/>
+                        </Route>
+                        <Route path='/'>
+                            <Files socket={socket}/>
+                            <Chat socket={socket}/>
+                        </Route>
+                        <Redirect to={`f${(+new Date).toString(16)}`} />
+                    </Switch>
+                }
             </Router>
         </>
     );

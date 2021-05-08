@@ -28,7 +28,7 @@ import { withRouter } from "react-router";
 class Editor extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { editorHtml: '<p>Сисястый цветочный лох</p>', mountedEditor: false, user_id: uuidv4() }
+        this.state = { editorHtml: '', mountedEditor: false, user_id: uuidv4() }
         this.quillRef = null;
         this.socket = new WebSocket(`ws://localhost:5000/`);
         //this.socket=new WebSocket(`ws://25.42.86.134:5000/`);
@@ -83,7 +83,7 @@ class Editor extends React.Component {
         // let position = range ? range.index : 0;
         // console.log(`position:${position}`);
         // this.quillRef.insertText(position, '\n')
-        this.setState({ editorHtml: "<p>чмо</p>" });
+        this.setState({ editorHtml: "<p>Здравсвуйте Сергей</p>" });
     }
 
     handleChange(html) {

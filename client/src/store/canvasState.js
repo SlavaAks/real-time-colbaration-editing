@@ -16,6 +16,7 @@ class CanvasState {
         this.sessionid = id
     }
     setSocket(socket) {
+        console.log("aaaaaaa")
         this.socket = socket
     }
 
