@@ -33,7 +33,6 @@ const Canvas = observer(() => {
     }, [])
 
     useEffect(() => {
-        if (canvasState.username) {
             const socket = new WebSocket(`ws://localhost:5000/`);
             canvasState.setSocket(socket)
             canvasState.setSessionId(params.id)
@@ -42,7 +41,7 @@ const Canvas = observer(() => {
                 console.log('Подключение установлено')
                 socket.send(JSON.stringify({
                     id:params.id,
-                    username: canvasState.username,
+                    username: localStorage.getItem('name'),
                     method: "connection"
                 }))
             }
@@ -57,7 +56,7 @@ const Canvas = observer(() => {
                         break
                 }
             }
-        }
+        
     }, [canvasState.username])
 
     const drawHandler = (msg) => {
@@ -96,26 +95,10 @@ const Canvas = observer(() => {
             .then(response => console.log(response.data))
     }
 
-    const connectHandler = () => {
-        canvasState.setUsername(usernameRef.current.value)
-        setModal(false)
-    }
+
 
     return (
-        <div className="canvas">
-            <Modal show={modal} onHide={() => {}}>
-                <Modal.Header >
-                    <Modal.Title>Введите ваше имя</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <input type="text" ref={usernameRef}/>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => connectHandler()}>
-                        Войти
-                    </Button>
-                </Modal.Footer>
-            </Modal> 
+        <div className="canvas"> 
             <canvas onMouseDown={() => mouseDownHandler()} ref={canvasRef} width={600} height={400}/>
         </div>
     );
