@@ -6,11 +6,47 @@ const cors = require('cors')
 const PORT = process.env.PORT || 5000
 const fs = require('fs')
 const path = require('path')
+const session= require('express-session')
+const cookieParser=require('cookie-parser')
 const { v4: uuidv4 } = require('uuid');
+const db = require('./setting/db')
+const UsersController = require('./Controller/UserController')
+const bodyParser = require('body-parser')
 
+const authMiddleware = require('./middleware/auth.middleware')
+//const router = new Router()
+// const http = require('http').createServer(app)
+// const io = require('socket.io')(http)
+
+// app.get('/', (req,res)=>{
+// res.sendFile(__dirname + '/index.html')
+// })
+
+app.use(express.static(__dirname + '../client/components'))
+const passport = require('passport')
+// io.on('connection', (socket)=>{
+//     socket.on('chat message',(data)=>{
+//         console.log("ss");
+//         io.emit('chat message',{
+//             message: data.message,
+//             name: data.name
+//         })
+//     })
+// })
+app.use(
+    session({
+        secret:"secretcode",
+        resave:true,
+        saveUninitialized:true
+    })
+)
 app.use(cors())
 app.use(express.json())
-
+app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.json())
+app.use(cookieParser("secretcode"))
+// app.use(passport.initialize())
+//app.use(session)
 app.ws('/', (ws, req) => {
     ws.on('message', (msg) => {
         msg = JSON.parse(msg)
@@ -24,9 +60,16 @@ app.ws('/', (ws, req) => {
             case "write":
                 broadcastConnection(ws, msg)
                 break
+            case "message":
+                broadcastConnection(ws, msg)
+                break
+            case "chat":
+                broadcastConnection(ws, msg)
+                break
         }
     })
 })
+
 
 app.post('/image', (req, res) => {
     try {
@@ -49,7 +92,7 @@ app.post('/create_doc', (req, res) => {
     } catch (e) {
         console.log(e)
         return res.status(500).json('error')
-    } ``
+    }
 })
 
 app.post('/create_holst', (req, res) => {
@@ -75,21 +118,21 @@ app.post('/html', (req, res) => {
         return res.status(500).json('error')
     } ``
 })
-
+// passport.authenticate('jwt', { session: false })
 
 app.get('/all_files', (req, res) => {
-    try {
+    try { 
         fs.readdir(`${__dirname}/files`, function (err, files) {
             //handling error
             if (err) {
                 return console.log('Unable to scan directory: ' + err);
-            } 
-            return res.status(200).json({files})
+            }
+            return res.status(200).json({ files })
             //listing all files using forEach
         })
 
-        
-        
+
+
     } catch (e) {
         console.log(e)
         return res.status(500).json('error')
@@ -117,6 +160,10 @@ app.get('/html', (req, res) => {
         return res.status(500).json('error')
     }
 })
+
+app.post('/registration',  UsersController.signup)
+app.post('/login',  UsersController.signin)
+app.get('/auth',authMiddleware,  UsersController.signauth)
 
 app.listen(PORT, () => console.log(`server started on PORT ${PORT}`))
 

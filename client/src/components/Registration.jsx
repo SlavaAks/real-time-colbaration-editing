@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-
-export default class Registration extends Component {
+import { withRouter } from "react-router";
+class Registration extends Component {
     constructor(props) {
         super(props);
 
@@ -37,11 +37,17 @@ export default class Registration extends Component {
 
             )
             .then(response => {
-                if (response.data.status === "created") {
-                    this.props.handleSuccessfulAuth(response.data);
+                console.log(response.status)
+                if (response.status === 200) {
+                    const { history } = this.props;
+                    history.push(`/Login`)
+                }
+                if(response.status ===302){
+                    alert("Пользователь с таким логином существует")
                 }
             })
             .catch(error => {
+                alert("Пользователь с таким логином существует")
                 console.log("registration error", error);
             });
         event.preventDefault();
@@ -93,3 +99,5 @@ export default class Registration extends Component {
         );
     }
 }
+
+export default  withRouter(Registration)
